@@ -24,7 +24,6 @@ namespace MyDebugLayer {
       return next(pCreateInfo, pAllocator, pInstance);
     }
 
-
     static VkResult CreateDevice(
       const vkroots::VkInstanceDispatch* dispatch,
             VkPhysicalDevice         physicalDevice,

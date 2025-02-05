@@ -6355,6 +6355,8 @@ namespace vkroots {
     // Make sure we call ours here.
     dispatch->DestroyDevice(device, pAllocator);
   }
+  
+  //extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 
   template <typename InstanceOverrides, typename PhysicalDeviceOverrides, typename DeviceOverrides>
   static PFN_vkVoidFunction GetInstanceProcAddr(VkInstance instance, const char* name) {
@@ -18269,15 +18271,9 @@ namespace vkroots {
     pVersionStruct->loaderLayerInterfaceVersion = 2;
 
     // Can't optimize away not having instance overrides from the layer, need to track device creation and instance dispatch and stuff.
-    pVersionStruct->pfnGetInstanceProcAddr       = std::is_base_of<NoOverrides, InstanceOverrides>::value && std::is_base_of<NoOverrides, PhysicalDeviceOverrides>::value && std::is_base_of<NoOverrides, DeviceOverrides>::value
-                                                     ? nullptr
-                                                     : &GetInstanceProcAddr<InstanceOverrides, PhysicalDeviceOverrides, DeviceOverrides>;
-    pVersionStruct->pfnGetPhysicalDeviceProcAddr = std::is_base_of<NoOverrides, PhysicalDeviceOverrides>::value && std::is_base_of<NoOverrides, DeviceOverrides>::value
-                                                     ? nullptr
-                                                     : &GetPhysicalDeviceProcAddr<InstanceOverrides, PhysicalDeviceOverrides, DeviceOverrides>;
-    pVersionStruct->pfnGetDeviceProcAddr         = std::is_base_of<NoOverrides, DeviceOverrides>::value
-                                                     ? nullptr
-                                                     : &GetDeviceProcAddr<InstanceOverrides, PhysicalDeviceOverrides, DeviceOverrides>;
+    pVersionStruct->pfnGetInstanceProcAddr       = &GetInstanceProcAddr<InstanceOverrides, PhysicalDeviceOverrides, DeviceOverrides>;
+    pVersionStruct->pfnGetPhysicalDeviceProcAddr = &GetPhysicalDeviceProcAddr<InstanceOverrides, PhysicalDeviceOverrides, DeviceOverrides>;
+    pVersionStruct->pfnGetDeviceProcAddr         = &GetDeviceProcAddr<InstanceOverrides, PhysicalDeviceOverrides, DeviceOverrides>;
 
     return VK_SUCCESS;
   }
