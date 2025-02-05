@@ -18295,7 +18295,8 @@ namespace vkroots {
 
 // Define VK_LAYER_EXPORT to dllexport.
 # undef VK_LAYER_EXPORT
-# define VK_LAYER_EXPORT extern "C" __declspec(dllexport)
+//# define VK_LAYER_EXPORT extern "C" __declspec(dllexport)
+# define VK_LAYER_EXPORT extern "C"
 
 // Fix stdcall aliasing on 32-bit Windows.
 # ifndef _WIN64
